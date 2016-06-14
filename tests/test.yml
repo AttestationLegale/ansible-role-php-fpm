@@ -3,7 +3,7 @@
   remote_user: root
 
   vars:
-    - package_list:
+    - php_fpm_package_list:
       - name: php5-fpm
 
   roles:
