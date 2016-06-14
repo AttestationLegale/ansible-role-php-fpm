@@ -1,0 +1,22 @@
+---
+
+galaxy_info:
+  author: Cyril Guillerminet
+  description: Php-fpm management
+  company: ALG
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.0
+  github_branch: master
+  platforms:
+    - name: Debian
+      versions:
+        - jessie
+  galaxy_tags:
+    - development
+    - web
+
+dependencies:
+  - role: GROG.package
+    package_list: "{{ php_fpm_package_list }}"
+    package_list_group: "{{ php_fpm_package_list_group }}"
+    package_list_host: "{{ php_fpm_package_list_host }}"

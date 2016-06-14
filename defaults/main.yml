@@ -1,0 +1,7 @@
+---
+
+# Defaults vars file for php-fpm role
+
+php_fpm_package_list: []
+php_fpm_package_list_group: []
+php_fpm_package_list_host: []

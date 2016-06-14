@@ -1,0 +1,10 @@
+---
+
+# Main tasks file for php-fpm role
+
+- name: Disable default php-fpm service
+  service:
+    name: php5-fpm
+    state: stopped
+    enabled: no
+  tags: [php-fpm]
