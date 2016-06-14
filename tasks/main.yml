@@ -2,10 +2,6 @@
 
 # Main tasks file for php-fpm role
 
-- name: Debug
-  debug:
-    var: php_fpm_package_list
-
 - name: Disable default php-fpm service
   service:
     name: php5-fpm
