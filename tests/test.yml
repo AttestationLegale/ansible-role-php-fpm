@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    - php_fpm_package_list:
+      - name: php5-fpm
+
+  roles:
+    - ansible-role-php-fpm
