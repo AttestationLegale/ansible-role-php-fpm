@@ -3,4 +3,4 @@
 # Defaults vars file for php-fpm role
 
 php_fpm_package_list:
-  - php5-fpm
+  - name: php5-fpm
