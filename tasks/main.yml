@@ -98,3 +98,28 @@
     mode: "0644"
   with_items: "{{ php_fpm_pools }}"
   tags: [php-fpm]
+
+- name: Create php5-fpm service
+  template:
+    src: php5-fpm.service.j2
+    dest: "{{ '/lib/systemd/system/php5-fpm-'~item.owner~'.service' }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Enable php5-fpm service
+  service:
+    name: "{{ 'php5-fpm-'~item.owner }}"
+    state: stopped
+    enabled: yes
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Start php5-fpm service
+  service:
+    name: "{{ 'php5-fpm-'~item.owner }}"
+    state: started
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
