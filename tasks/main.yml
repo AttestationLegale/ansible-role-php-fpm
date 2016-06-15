@@ -115,6 +115,7 @@
     state: stopped
     enabled: yes
   with_items: "{{ php_fpm_pools }}"
+  when: item.enabled
   tags: [php-fpm]
 
 - name: Start php5-fpm service
@@ -122,4 +123,5 @@
     name: "{{ 'php5-fpm-'~item.owner }}"
     state: started
   with_items: "{{ php_fpm_pools }}"
+  when: item.started
   tags: [php-fpm]
