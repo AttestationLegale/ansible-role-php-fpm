@@ -9,6 +9,36 @@
     enabled: no
   tags: [php-fpm]
 
+- name: Push php.ini
+  template:
+    src: php.ini.j2
+    dest: "{{ item.home~'/etc/php5/fpm/php.ini' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0644"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Push php-fpm.conf
+  template:
+    src: php-fpm.conf.j2
+    dest: "{{ item.home~'/etc/php5/fpm/php-fpm.conf' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0644"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Push env.conf
+  template:
+    src: env.conf.j2
+    dest: "{{ item.home~'/etc/php5/fpm/env.conf' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0644"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
 - name: Push php5-fpm-checkconf script
   template:
     src: php5-fpm-checkconf.j2
@@ -36,5 +66,25 @@
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
     mode: "0750"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Push sessionclean cron job
+  template:
+    src: php5.cron.j2
+    dest: "{{ '/etc/cron.d/php5-'~item.name }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Push php5-fpm logrotate conf
+  template:
+    src: php5-fpm.logrotate.j2
+    dest: "{{ '/etc/logrotate.d/php5-fpm-'~item.name }}"
+    owner: "root"
+    group: "root"
+    mode: "0644"
   with_items: "{{ php_fpm_pools }}"
   tags: [php-fpm]
