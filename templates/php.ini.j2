@@ -186,7 +186,7 @@
 
 ; Enable the PHP scripting language engine under Apache.
 ; http://php.net/engine
-engine = On
+engine = {{ php_config.engine|default('On') }}
 
 ; This directive determines whether or not PHP will recognize code between
 ; <? and ?> tags as PHP source which should be processed as such. It is
