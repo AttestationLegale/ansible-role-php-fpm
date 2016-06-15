@@ -8,3 +8,13 @@
     state: stopped
     enabled: no
   tags: [php-fpm]
+
+- name: Push php5-fpm-checkconf script
+  template:
+    src: php5-fpm-checkconf.j2
+    dest: "{{ item.home~'/usr/lib/php5/php5-fpm-checkconf' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0750"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]

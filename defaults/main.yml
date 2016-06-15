@@ -4,3 +4,5 @@
 
 php_fpm_package_list:
   - name: php5-fpm
+
+php_fpm_pools: []
