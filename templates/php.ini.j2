@@ -876,12 +876,12 @@ default_socket_timeout = {% if item.php_config is defined %}{{ item.php_config.d
 
 [CLI Server]
 ; Whether the CLI web server uses ANSI color coding in its terminal output.
-cli_server.color = {% if item.php_config is defined %}{{ item.php_config.cli_server.color|default('On') }}{% else %}On{% endif %}
+cli_server.color = {% if item.php_config is defined %}{{ item.php_config_cli_server.color|default('On') }}{% else %}On{% endif %}
 
 [Date]
 ; Defines the default timezone used by the date functions
 ; http://php.net/date.timezone
-date.timezone = {% if item.php_config is defined %}{{ item.php_config.date.timezone|default('Europe/Paris') }}{% else %}Europe/Paris{% endif %}
+date.timezone = {% if item.php_config is defined %}{{ item.php_config.date_timezone|default('Europe/Paris') }}{% else %}Europe/Paris{% endif %}
 
 ; http://php.net/date.default-latitude
 ;date.default_latitude = 31.7667
