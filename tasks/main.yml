@@ -39,6 +39,16 @@
   with_items: "{{ php_fpm_pools }}"
   tags: [php-fpm]
 
+- name: Push php-fpm pool
+  template:
+    src: pool.conf.j2
+    dest: "{{ item.home~'/etc/php5/fpm/pool.d/'~item.owner~'.conf' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0644"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
 - name: Push php5-fpm-checkconf script
   template:
     src: php5-fpm-checkconf.j2
