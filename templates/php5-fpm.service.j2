@@ -1,0 +1,13 @@
+[Unit]
+Description=The PHP FastCGI Process Manager For {{ item.owner }}
+After=network.target
+
+[Service] 
+Type=notify
+PIDFile={{ item.home }}/var/run/php5-fpm.pid
+ExecStartPre={{ item.home }}/usr/lib/php5/php5-fpm-checkconf
+ExecStart=/usr/sbin/php5-fpm -c {{ item.home }}/etc/php5/fpm/php.ini --nodaemonize --fpm-config {{ item.home }}/etc/php5/fpm/php-fpm.conf
+ExecReload=/bin/kill -USR2 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
