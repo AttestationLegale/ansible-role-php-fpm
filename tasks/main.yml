@@ -18,3 +18,23 @@
     mode: "0750"
   with_items: "{{ php_fpm_pools }}"
   tags: [php-fpm]
+
+- name: Push php5-fpm-reopenlogs script
+  template:
+    src: php5-fpm-reopenlogs.j2
+    dest: "{{ item.home~'/usr/lib/php5/php5-fpm-reopenlogs' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0750"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
+
+- name: Push sessionclean script
+  template:
+    src: sessionclean.j2
+    dest: "{{ item.home~'/usr/lib/php5/sessionclean' }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "0750"
+  with_items: "{{ php_fpm_pools }}"
+  tags: [php-fpm]
