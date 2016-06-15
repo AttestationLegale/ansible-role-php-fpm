@@ -82,7 +82,7 @@
 - name: Push sessionclean cron job
   template:
     src: php5.cron.j2
-    dest: "{{ '/etc/cron.d/php5-'~item.name }}"
+    dest: "{{ '/etc/cron.d/php5-'~item.owner }}"
     owner: "root"
     group: "root"
     mode: "0644"
@@ -92,7 +92,7 @@
 - name: Push php5-fpm logrotate conf
   template:
     src: php5-fpm.logrotate.j2
-    dest: "{{ '/etc/logrotate.d/php5-fpm-'~item.name }}"
+    dest: "{{ '/etc/logrotate.d/php5-fpm-'~item.owner }}"
     owner: "root"
     group: "root"
     mode: "0644"
