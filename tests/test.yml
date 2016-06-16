@@ -46,8 +46,6 @@
         home: /srv/symfony/redfive
         name: RedFive Project
         skeleton: /etc/skel.web
-    - php_fpm_package_list:
-      - name: php5-fpm
     - php_fpm_pools:
       - owner: redfive
         group: www-data
