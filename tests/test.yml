@@ -54,6 +54,19 @@
         started: False
         php_config: []
         php_fpm_config: []
+        php_fpm_pool_config:
+          php_admin_value:
+            - key: 'sendmail_path'
+              value: '/usr/sbin/sendmail -t -i -f www@my.domain.com'
+          php_admin_flag:
+            - key: 'log_errors'
+              value: 'on'
+          php_value:
+            - key: 'upload_max_filesize'
+              value: '10M'
+          php_flag:
+            - key: 'display_errors'
+              value: 'off'
 
   roles:
     - AttestationLegale.skel

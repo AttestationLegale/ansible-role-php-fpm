@@ -1,7 +1,7 @@
 ; Start a new pool named 'www'.
 ; the variable $pool can we used in any directive and will be replaced by the
 ; pool name ('www' here)
-[{{ item.owner }}]
+[{% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pool|default(item.owner) }}{% else %}{{ item.owner }}{% endif %}]
 
 ; Per pool prefix
 ; It only applies on the following directives:
@@ -15,13 +15,13 @@
 ; When not set, the global prefix (or /usr) applies instead.
 ; Note: This directive can also be relative to the global prefix.
 ; Default Value: none
-prefix = {{ item.home }}
+prefix = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.prefix|default(item.home) }}{% else %}{{ item.home }}{% endif %}
 
 ; Unix user/group of processes
 ; Note: The user is mandatory. If the group is not set, the default user's group
 ;       will be used.
-user = {{ item.owner }}
-group = {{ item.group }}
+user = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.user|default(item.owner) }}{% else %}{{ item.owner }}{% endif %}
+group = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.group|default(item.group) }}{% else %}{{ item.group }}{% endif %}
 
 ; The address on which to accept FastCGI requests.
 ; Valid syntaxes are:
@@ -35,25 +35,38 @@ group = {{ item.group }}
 ;                            (IPv6 and IPv4-mapped) on a specific port;
 ;   '/path/to/unix/socket' - to listen on a unix socket.
 ; Note: This value is mandatory.
-listen = var/run/php5-fpm.sock
+listen = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.listen|default('var/run/php5-fpm.sock') }}{% else %}var/run/php5-fpm.sock{% endif %}
 
 ; Set listen(2) backlog.
 ; Default Value: 65535 (-1 on FreeBSD and OpenBSD)
-;listen.backlog = 65535
+listen.backlog = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.listen_backlog|default('65535') }}{% else %}65535{% endif %}
 
 ; Set permissions for unix socket, if one is used. In Linux, read/write
 ; permissions must be set in order to allow connections from a web server. Many
 ; BSD-derived systems allow connections regardless of permissions. 
 ; Default Values: user and group are set as the running user
 ;                 mode is set to 0660
-listen.owner = {{ item.owner }}
-listen.group = {{ item.group }}
-;listen.mode = 0660
+listen.owner = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.listen_owner|default(item.owner) }}{% else %}{{ item.owner }}{% endif %}
+listen.group = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.listen_group|default(item.group) }}{% else %}{{ item.group }}{% endif %}
+listen.mode = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.listen_mode|default('0660') }}{% else %}0660{% endif %}
 ; When POSIX Access Control Lists are supported you can set them using
 ; these options, value is a comma separated list of user/group names.
 ; When set, listen.owner and listen.group are ignored
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.listen_acl_users is defined %}
+listen.acl_users = {{ item.php_fpm_pool_config.listen_acl_users }}
+{% else %}
+;listen.acl_users =
+{% endif %}
+{% if item.php_fpm_pool_config.listen_acl_groups is defined %}
+listen.acl_groups = {{ item.php_fpm_pool_config.listen_acl_groups }}
+{% else %}
+;listen.acl_groups =
+{% endif %}
+{% else %}
 ;listen.acl_users =
 ;listen.acl_groups =
+{% endif %}
  
 ; List of addresses (IPv4/IPv6) of FastCGI clients which are allowed to connect.
 ; Equivalent to the FCGI_WEB_SERVER_ADDRS environment variable in the original
@@ -61,7 +74,7 @@ listen.group = {{ item.group }}
 ; must be separated by a comma. If this value is left blank, connections will be
 ; accepted from any ip address.
 ; Default Value: any
-listen.allowed_clients = 127.0.0.1
+listen.allowed_clients = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.listen_allowed_clients|default('127.0.0.1') }}{% else %}127.0.0.1{% endif %}
 
 ; Specify the nice(2) priority to apply to the pool processes (only if set)
 ; The value can vary from -19 (highest priority) to 20 (lower priority)
@@ -70,6 +83,11 @@ listen.allowed_clients = 127.0.0.1
 ;         unless it specified otherwise
 ; Default Value: no set
 ; process.priority = -19
+{% if item.php_fpm_pool_config is defined %}
+  {% if item.php_fpm_pool_config.process_priority is defined %}
+process.priority = {{ item.php_fpm_pool_config.process_priority }}
+  {% endif %}
+{% endif %}
 
 ; Choose how the process manager will control the number of child processes.
 ; Possible Values:
@@ -95,7 +113,7 @@ listen.allowed_clients = 127.0.0.1
 ;             pm.process_idle_timeout   - The number of seconds after which
 ;                                         an idle process will be killed.
 ; Note: This value is mandatory.
-pm = dynamic
+pm = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm|default('dynamic') }}{% else %}dynamic{% endif %}
 
 ; The number of child processes to be created when pm is set to 'static' and the
 ; maximum number of child processes when pm is set to 'dynamic' or 'ondemand'.
@@ -106,33 +124,33 @@ pm = dynamic
 ; forget to tweak pm.* to fit your needs.
 ; Note: Used when pm is set to 'static', 'dynamic' or 'ondemand'
 ; Note: This value is mandatory.
-pm.max_children = 5
+pm.max_children = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm_max_children|default('5') }}{% else %}5{% endif %}
 
 ; The number of child processes created on startup.
 ; Note: Used only when pm is set to 'dynamic'
 ; Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
-pm.start_servers = 2
+pm.start_servers = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm_start_servers|default('2') }}{% else %}2{% endif %}
 
 ; The desired minimum number of idle server processes.
 ; Note: Used only when pm is set to 'dynamic'
 ; Note: Mandatory when pm is set to 'dynamic'
-pm.min_spare_servers = 1
+pm.min_spare_servers = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm_min_spare_servers|default('1') }}{% else %}1{% endif %}
 
 ; The desired maximum number of idle server processes.
 ; Note: Used only when pm is set to 'dynamic'
 ; Note: Mandatory when pm is set to 'dynamic'
-pm.max_spare_servers = 3
+pm.max_spare_servers = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm_max_spare_servers|default('3') }}{% else %}3{% endif %}
 
 ; The number of seconds after which an idle process will be killed.
 ; Note: Used only when pm is set to 'ondemand'
 ; Default Value: 10s
-;pm.process_idle_timeout = 10s;
+pm.process_idle_timeout = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm_process_idle_timeout|default('10s') }}{% else %}10s{% endif %}
 
 ; The number of requests each child process should execute before respawning.
 ; This can be useful to work around memory leaks in 3rd party libraries. For
 ; endless request processing specify '0'. Equivalent to PHP_FCGI_MAX_REQUESTS.
 ; Default Value: 0
-;pm.max_requests = 500
+pm.max_requests = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.pm_max_requests|default('0') }}{% else %}0{% endif %}
 
 ; The URI to view the FPM status page. If this value is not set, no URI will be
 ; recognized as a status page. It shows the following informations:
@@ -231,7 +249,15 @@ pm.max_spare_servers = 3
 ;       anything, but it may not be a good idea to use the .php extension or it
 ;       may conflict with a real PHP file.
 ; Default Value: not set 
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.pm_status_path is defined %}
+pm.status_path = {{ item.php_fpm_pool_config.pm_status_path }}
+{% else %}
 ;pm.status_path = /status
+{% endif %}
+{% else %}
+;pm.status_path = /status
+{% endif %}
 
 ; The ping URI to call the monitoring page of FPM. If this value is not set, no
 ; URI will be recognized as a ping page. This could be used to test from outside
@@ -243,16 +269,32 @@ pm.max_spare_servers = 3
 ;       anything, but it may not be a good idea to use the .php extension or it
 ;       may conflict with a real PHP file.
 ; Default Value: not set
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.pm_status_path is defined %}
+ping.path = {{ item.php_fpm_pool_config.ping_path }}
+{% else %}
 ;ping.path = /ping
+{% endif %}
+{% else %}
+;ping.path = /ping
+{% endif %}
 
 ; This directive may be used to customize the response of a ping request. The
 ; response is formatted as text/plain with a 200 response code.
 ; Default Value: pong
-;ping.response = pong
+ping.response = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.ping_response|default('pong') }}{% else %}pong{% endif %}
 
 ; The access log file
 ; Default: not set
-access.log = var/log/php-fpm/$pool.access.log
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.access_log is defined %}
+access.log = {{ item.php_fpm_pool_config.access_log }}
+{% else %}
+;access.log = log/$pool.access.log
+{% endif %}
+{% else %}
+;access.log = log/$pool.access.log
+{% endif %}
 
 ; The access log format.
 ; The following syntax is allowed
@@ -308,32 +350,58 @@ access.log = var/log/php-fpm/$pool.access.log
 ;
 ; Default: "%R - %u %t \"%m %r\" %s"
 ;access.format = "%R - %u %t \"%m %r%Q%q\" %s %f %{mili}d %{kilo}M %C%%"
+access.format = "{% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.access_format|default('%R - %u %t \"%m %r\" %s') }}{% else %}%R - %u %t \"%m %r\" %s{% endif %}"
  
 ; The log file for slow requests
 ; Default Value: not set
 ; Note: slowlog is mandatory if request_slowlog_timeout is set
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.slowlog is defined %}
+slowlog = {{ item.php_fpm_pool_config.slowlog }}
+{% else %}
 ;slowlog = var/log/php-fpm/$pool-slow.log
+{% endif %}
+{% else %}
+;slowlog = var/log/php-fpm/$pool-slow.log
+{% endif %}
  
 ; The timeout for serving a single request after which a PHP backtrace will be
 ; dumped to the 'slowlog' file. A value of '0s' means 'off'.
 ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
 ; Default Value: 0
-;request_slowlog_timeout = 0
+request_slowlog_timeout = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.request_slowlog_timeout|default('0') }}{% else %}0{% endif %}
  
 ; The timeout for serving a single request after which the worker process will
 ; be killed. This option should be used when the 'max_execution_time' ini option
 ; does not stop script execution for some reason. A value of '0' means 'off'.
 ; Available units: s(econds)(default), m(inutes), h(ours), or d(ays)
 ; Default Value: 0
-;request_terminate_timeout = 0
+request_terminate_timeout = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.request_terminate_timeout|default('0') }}{% else %}0{% endif %}
  
 ; Set open file descriptor rlimit.
 ; Default Value: system defined value
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.rlimit_files is defined %}
+rlimit_files = {{ item.php_fpm_pool_config.rlimit_files }}
+{% else %}
 ;rlimit_files = 1024
+{% endif %}
+{% else %}
+;rlimit_files = 1024
+{% endif %}
  
 ; Set max core size rlimit.
 ; Possible Values: 'unlimited' or an integer greater or equal to 0
 ; Default Value: system defined value
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.rlimit_files is defined %}
+rlimit_core = {{ item.php_fpm_pool_config.rlimit_core }}
+{% else %}
+;rlimit_core = 0
+{% endif %}
+{% else %}
+;rlimit_core = 0
+{% endif %}
 ;rlimit_core = 0
  
 ; Chroot to this directory at the start. This value must be defined as an
@@ -345,19 +413,27 @@ access.log = var/log/php-fpm/$pool.access.log
 ;       possible. However, all PHP paths will be relative to the chroot
 ;       (error_log, sessions.save_path, ...).
 ; Default Value: not set
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.chroot is defined %}
+chroot = {{ item.php_fpm_pool_config.chroot }}
+{% else %}
 ;chroot = 
- 
+{% endif %}
+{% else %}
+;chroot = 
+{% endif %}
+
 ; Chdir to this directory at the start.
 ; Note: relative path can be used.
 ; Default Value: current directory or / when chroot
-chdir = /
+chdir = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.chdir|default('/') }}{% else %}/{% endif %}
  
 ; Redirect worker stdout and stderr into main error log. If not set, stdout and
 ; stderr will be redirected to /dev/null according to FastCGI specs.
 ; Note: on highloaded environement, this can cause some delay in the page
 ; process time (several ms).
 ; Default Value: no
-;catch_workers_output = yes
+catch_workers_output = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.catch_workers_output|default('no') }}{% else %}no{% endif %}
 
 ; Clear environment in FPM workers
 ; Prevents arbitrary environment variables from reaching FPM worker processes
@@ -366,7 +442,7 @@ chdir = /
 ; Setting to "no" will make all environment variables available to PHP code
 ; via getenv(), $_ENV and $_SERVER.
 ; Default Value: yes
-;clear_env = no
+clear_env = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.clear_env|default('yes') }}{% else %}yes{% endif %}
 
 ; Limits the extensions of the main script FPM will allow to parse. This can
 ; prevent configuration mistakes on the web server side. You should only limit
@@ -375,6 +451,7 @@ chdir = /
 ; Note: set an empty value to allow all extensions.
 ; Default Value: .php
 ;security.limit_extensions = .php .php3 .php4 .php5
+security.limit_extensions = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.security_limit_extensions|default('.php') }}{% else %}.php{% endif %}
  
 ; Pass environment variables like LD_LIBRARY_PATH. All $VARIABLEs are taken from
 ; the current environment.
@@ -384,7 +461,7 @@ chdir = /
 ;env[TMP] = /tmp
 ;env[TMPDIR] = /tmp
 ;env[TEMP] = /tmp
-include = {{ item.home }}/etc/php5/fpm/env.conf
+include = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_config.include|default(item.home~'/etc/php5/fpm/env.conf') }}{% else %}{{ item.home~'/etc/php5/fpm/env.conf' }}{% endif %}
 
 ; Additional php.ini defines, specific to this pool of workers. These settings
 ; overwrite the values previously defined in the php.ini. The directives are the
@@ -410,3 +487,25 @@ include = {{ item.home }}/etc/php5/fpm/env.conf
 ;php_admin_value[error_log] = /var/log/fpm-php.www.log
 ;php_admin_flag[log_errors] = on
 ;php_admin_value[memory_limit] = 32M
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.php_admin_flag is defined %}
+{% for php_admin_flag in item.php_fpm_pool_config.php_admin_flag %}
+php_admin_flag[{{ php_admin_flag.key }}] = {{ php_admin_flag.value }}
+{% endfor %}
+{% endif %}
+{% if item.php_fpm_pool_config.php_admin_value is defined %}
+{% for php_admin_value in item.php_fpm_pool_config.php_admin_value %}
+php_admin_value[{{ php_admin_value.key }}] = {{ php_admin_value.value }}
+{% endfor %}
+{% endif %}
+{% if item.php_fpm_pool_config.php_flag is defined %}
+{% for php_flag in item.php_fpm_pool_config.php_flag %}
+php_flag[{{ php_flag.key }}] = {{ php_flag.value }}
+{% endfor %}
+{% endif %}
+{% if item.php_fpm_pool_config.php_value is defined %}
+{% for php_value in item.php_fpm_pool_config.php_value %}
+php_value[{{ php_value.key }}] = {{ php_value.value }}
+{% endfor %}
+{% endif %}
+{% endif %}
