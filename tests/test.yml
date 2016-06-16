@@ -56,4 +56,6 @@
         php_fpm_config: []
 
   roles:
+    - AttestationLegale.skel
+    - AttestationLegale.users
     - ansible-role-php-fpm
