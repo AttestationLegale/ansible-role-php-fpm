@@ -67,6 +67,19 @@
           php_flag:
             - key: 'display_errors'
               value: 'off'
+        php_fpm_env_config:
+          - key: 'SYMFONY__SF__SECRET'
+            value: 'ThisTokenIsNotSoSecretChangeIt'
+          - key: 'SYMFONY__DATABASE__POSTGRES__HOST'
+            value: 'localhost'
+          - key: 'SYMFONY__DATABASE__POSTGRES__PORT'
+            value: '5432'
+          - key: 'SYMFONY__DATABASE__POSTGRES__NAME'
+            value: 'pgdb'
+          - key: 'SYMFONY__DATABASE__POSTGRES__USER'
+            value: 'pguser'
+          - key: 'SYMFONY__DATABASE__POSTGRES__PASSWORD'
+            value: 'pgpass'
 
   roles:
     - AttestationLegale.skel
