@@ -40,5 +40,11 @@ script:
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)
 
+  # Test php-fpm config
+  - >
+    sudo /srv/symfony/redfive/usr/lib/php5/php5-fpm-checkconf
+    && (echo 'Check php-fpm config succeeded: pass' && exit 0)
+    || (echo 'Check php-fpm config failed: fail' && exit 1)
+
 #notifications:
 #  webhooks: https://galaxy.ansible.com/api/v1/notifications/

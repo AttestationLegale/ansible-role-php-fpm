@@ -54,6 +54,7 @@
         started: False
         php_config: []
         php_fpm_config: []
+        php_fpm_pool_config: []
 
   roles:
     - AttestationLegale.skel
