@@ -2,5 +2,58 @@
 - hosts: localhost
   remote_user: root
 
+  vars:
+    - skel_entries:
+      - path: /etc/skel.web
+        state: directory
+      - path: /etc/skel.web/.ssh
+        state: directory
+        mode: "0700"
+      - path: /etc/skel.web/etc
+        state: directory
+      - path: /etc/skel.web/etc/php5
+        state: directory
+      - path: /etc/skel.web/etc/php5/fpm
+        state: directory
+      - path: /etc/skel.web/etc/php5/fpm/pool.d
+        state: directory
+      - path: /etc/skel.web/usr
+        state: directory
+      - path: /etc/skel.web/usr/lib
+        state: directory
+      - path: /etc/skel.web/usr/lib/php5
+        state: directory
+      - path: /etc/skel.web/var
+        state: directory
+      - path: /etc/skel.web/var/log
+        state: directory
+      - path: /etc/skel.web/var/log/php-fpm
+        state: directory
+      - path: /etc/skel.web/var/run
+        state: directory
+      - path: /etc/skel.web/var/lib
+        state: directory
+      - path: /etc/skel.web/var/lib/php5
+        state: directory
+      - path: /etc/skel.web/var/lib/php5/sessions
+        state: directory
+    - users_alt_homebase:
+      - path: /srv/symfony
+    - users_users:
+      - username: redfive
+        uid: 10000
+        group: www-data
+        home: /srv/symfony/redfive
+        name: RedFive Project
+        skeleton: /etc/skel.web
+    - php_fpm_pools:
+      - owner: redfive
+        group: www-data
+        home: /srv/symfony/redfive
+        enabled: False
+        started: False
+        php_config: []
+        php_fpm_config: []
+
   roles:
     - ansible-role-php-fpm
