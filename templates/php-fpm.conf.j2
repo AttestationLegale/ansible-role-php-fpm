@@ -22,14 +22,14 @@
 ; Pid file
 ; Note: the default prefix is /var
 ; Default Value: none
-pid = {{ item.home }}/var/run/php5-fpm.pid
+pid = {% if item.php_fpm_config is defined %}{{ item.php_fpm_config.pid|default({{ item.home~'/var/run/php5-fpm.pid' }}) }}{% else %}{{ item.home~'/var/run/php5-fpm.pid' }}{% endif %}
 
 ; Error log file
 ; If it's set to "syslog", log is sent to syslogd instead of being written
 ; in a local file.
 ; Note: the default prefix is /var
 ; Default Value: log/php-fpm.log
-error_log = {{ item.home }}/var/log/php-fpm/php5-fpm.log
+error_log = {% if item.php_fpm_config is defined %}{{ item.php_fpm_config.error_log|default({{ item.home~'/var/log/php5-fpm.log' }}) }}{% else %}{{ item.home~'/var/log/php-fpm/php5-fpm.log' }}{% endif %}
 
 ; syslog_facility is used to specify what type of program is logging the
 ; message. This lets syslogd specify that messages from different facilities
@@ -126,4 +126,4 @@ error_log = {{ item.home }}/var/log/php-fpm/php5-fpm.log
 
 ; To configure the pools it is recommended to have one .conf file per
 ; pool in the following directory:
-include={{ item.home }}/etc/php5/fpm/pool.d/*.conf
+include={% if item.php_fpm_config is defined %}{{ item.php_fpm_config.include|default({{ item.home~'/etc/php5/fpm/pool.d/*.conf' }}) }}{% else %}{{ item.home~'/etc/php5/fpm/pool.d/*.conf' }}{% endif %}
