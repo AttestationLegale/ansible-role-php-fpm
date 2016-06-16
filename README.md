@@ -72,6 +72,7 @@ For a complete list of variables, see `default/main.yml`.
           php_config: []
           php_fpm_config: []
           php_fpm_pool_config: []
+          php_fpm_env_config: []
 ```
 
 `php_config` can be used to customize `etc/php5/fpm/php.ini` (see `templates/php.ini.j2` for details).
@@ -79,6 +80,8 @@ For a complete list of variables, see `default/main.yml`.
 `php_fpm_config` can be used to customize `etc/php5/fpm/php-fpm.conf` (see `templates/php-fpm.conf.j2` for details).
 
 `php_fpm_pool_config` can be used to customize `etc/php5/fpm/pool.d/{{ user }.conf` (see `templates/pool.conf.j2` for details).
+
+`php_fpm_env_config` can be used to customize `etc/php5/fpm/env.conf` (see `templates/env.conf.j2` for details).
 
 ## License
 
