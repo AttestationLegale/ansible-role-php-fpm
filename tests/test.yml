@@ -84,4 +84,6 @@
   roles:
     - AttestationLegale.skel
     - AttestationLegale.users
+    - role: GROG.package
+      package_list: "{{ php_fpm_package_list }}"
     - ansible-role-php-fpm

@@ -16,5 +16,4 @@ galaxy_info:
     - web
 
 dependencies:
-  - role: GROG.package
-    package_list: "{{ php_fpm_package_list }}"
+  - GROG.package

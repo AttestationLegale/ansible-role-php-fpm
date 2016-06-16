@@ -2,7 +2,4 @@
 
 # Defaults vars file for php-fpm role
 
-php_fpm_package_list:
-  - name: php5-fpm
-
 php_fpm_pools: []
