@@ -487,3 +487,23 @@ include = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_confi
 ;php_admin_value[error_log] = /var/log/fpm-php.www.log
 ;php_admin_flag[log_errors] = on
 ;php_admin_value[memory_limit] = 32M
+{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_admin_flag is defined %}
+  {% for php_admin_flag in item.php_fpm_pool_config.php_admin_flag %}
+php_admin_flag[{{ php_admin_flag.key }}] = {{ php_admin_flag.value }}
+  {% endfor %}
+{% endif %}
+{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_admin_value is defined %}
+  {% for php_admin_value in item.php_fpm_pool_config.php_admin_value %}
+php_admin_value[{{ php_admin_value.key }}] = {{ php_admin_value.value }}
+  {% endfor %}
+{% endif %}
+{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_flag is defined %}
+  {% for php_flag in item.php_fpm_pool_config.php_flag %}
+php_flag[{{ php_flag.key }}] = {{ php_flag.value }}
+  {% endfor %}
+{% endif %}
+{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_value is defined %}
+  {% for php_value in item.php_fpm_pool_config.php_value %}
+php_value[{{ php_value.key }}] = {{ php_value.value }}
+  {% endfor %}
+{% endif %}
