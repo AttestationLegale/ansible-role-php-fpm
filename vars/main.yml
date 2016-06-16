@@ -1,4 +1,6 @@
 ---
 
-# Main vars file for web-project role
+# Main vars file for php-fpm role
 
+php_fpm_package_list:
+  - php5-fpm

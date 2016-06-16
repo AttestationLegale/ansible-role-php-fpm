@@ -88,6 +88,4 @@
     - AttestationLegale.users
     - role: GROG.package
       package_list: "{{ php_fpm_package_list }}"
-      package_list_group: "{{ php_fpm_package_list_group }}"
-      package_list_host: "{{ php_fpm_package_list_host }}"
     - ansible-role-php-fpm
