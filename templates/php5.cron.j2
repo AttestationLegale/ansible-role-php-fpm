@@ -1,2 +1,3 @@
+# {{ ansible_managed }}
 # Look for and purge old sessions every 30 minutes
 09,39 *     * * *     root   [ -x {{ item.home }}/usr/lib/php5/sessionclean ] && {{ item.home }}/usr/lib/php5/sessionclean

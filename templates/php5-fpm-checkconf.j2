@@ -1,4 +1,6 @@
 #!/bin/sh
+# {{ ansible_managed }}
+
 set -e
 errors=$(/usr/sbin/php5-fpm --fpm-config {{ item.home }}/etc/php5/fpm/php-fpm.conf -t 2>&1 | grep "\[ERROR\]" || true);
 if [ -n "$errors" ]; then

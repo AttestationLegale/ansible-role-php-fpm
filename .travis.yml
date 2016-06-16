@@ -46,9 +46,9 @@ script:
     && (echo 'Check php-fpm config succeeded: pass' && exit 0)
     || (echo 'Check php-fpm config failed: fail' && exit 1)
 
-  # Debug pool.conf
+  # Debug env.conf
   - >
-    sudo cat /srv/symfony/redfive/etc/php5/fpm/pool.d/redfive.conf
+    sudo cat /srv/symfony/redfive/etc/php5/fpm/env.conf
 
 #notifications:
 #  webhooks: https://galaxy.ansible.com/api/v1/notifications/
