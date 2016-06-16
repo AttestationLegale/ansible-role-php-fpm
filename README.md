@@ -2,13 +2,10 @@
 
 [![Build Status](https://travis-ci.org/AttestationLegale/ansible-role-php-fpm.svg?branch=master)](https://travis-ci.org/AttestationLegale/ansible-role-php-fpm) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-php--fpm-blue.svg)](https://galaxy.ansible.com/AttestationLegale/php-fpm/)
 
-The php-fpm role allows you to install php-fpm and create dedicated instances  running under a specified user/group.
-
-Behind the scene it uses [GROG.package](https://galaxy.ansible.com/GROG/package/). It supports multi-level package management by using `with_flattened` statement.
+The php-fpm role allows you to create dedicated instances  running under a specified user/group.
 
 This role performs the following tasks:
 
-  - install php5-fpm
   - create /home/{{ user }}/etc/php5/fpm/php.ini
   - create /home/{{ user }}/etc/php5/fpm/php-fpm.conf
   - create /home/{{ user }}/etc/php5/fpm/env.conf
@@ -55,7 +52,7 @@ For a complete list of variables, see `default/main.yml`.
 
 ## Dependencies
 
-[GROG.package](https://galaxy.ansible.com/GROG/package/)
+None
 
 ## Example Playbook
 
