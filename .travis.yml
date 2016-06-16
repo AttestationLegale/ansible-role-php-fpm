@@ -21,6 +21,12 @@ script:
   # install package dependency
   - "ansible-galaxy install GROG.package -p tests/roles"
 
+  # install skel dependency
+  - "git clone https://github.com/AttestationLegale/ansible-role-skel.git tests/roles/AttestationLegale.skel"
+
+  # install users dependency
+  - "git clone https://github.com/AttestationLegale/ansible-role-users.git tests/roles/AttestationLegale.users"
+
   # Check the role/playbook's syntax.
   - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
 
