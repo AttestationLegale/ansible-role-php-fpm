@@ -70,9 +70,12 @@ For a complete list of variables, see `default/main.yml`.
           group: bar
           home: /home/foo
           php_config: []
+          php_fpm_config: []
 ```
 
 `php_config` can be used to customize `php.ini` (see `templates/php.ini.j2` for details).
+
+`php_fpm_config` can be used to customize `php-fpm.conf` (see `templates/php-fpm.conf.j2` for details).
 
 ## License
 
