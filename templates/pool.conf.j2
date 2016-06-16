@@ -53,16 +53,16 @@ listen.mode = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_c
 ; these options, value is a comma separated list of user/group names.
 ; When set, listen.owner and listen.group are ignored
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.listen_acl_users is defined %}
+{% if item.php_fpm_pool_config.listen_acl_users is defined %}
 listen.acl_users = {{ item.php_fpm_pool_config.listen_acl_users }}
-  {% else %}
+{% else %}
 ;listen.acl_users =
-  {% endif %}
-  {% if item.php_fpm_pool_config.listen_acl_groups is defined %}
+{% endif %}
+{% if item.php_fpm_pool_config.listen_acl_groups is defined %}
 listen.acl_groups = {{ item.php_fpm_pool_config.listen_acl_groups }}
-  {% else %}
+{% else %}
 ;listen.acl_groups =
-  {% endif %}
+{% endif %}
 {% else %}
 ;listen.acl_users =
 ;listen.acl_groups =
@@ -250,11 +250,11 @@ pm.max_requests = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_po
 ;       may conflict with a real PHP file.
 ; Default Value: not set 
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.pm_status_path is defined %}
+{% if item.php_fpm_pool_config.pm_status_path is defined %}
 pm.status_path = {{ item.php_fpm_pool_config.pm_status_path }}
-  {% else %}
+{% else %}
 ;pm.status_path = /status
-  {% endif %}
+{% endif %}
 {% else %}
 ;pm.status_path = /status
 {% endif %}
@@ -270,11 +270,11 @@ pm.status_path = {{ item.php_fpm_pool_config.pm_status_path }}
 ;       may conflict with a real PHP file.
 ; Default Value: not set
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.pm_status_path is defined %}
+{% if item.php_fpm_pool_config.pm_status_path is defined %}
 ping.path = {{ item.php_fpm_pool_config.ping_path }}
-  {% else %}
+{% else %}
 ;ping.path = /ping
-  {% endif %}
+{% endif %}
 {% else %}
 ;ping.path = /ping
 {% endif %}
@@ -287,11 +287,11 @@ ping.response = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool
 ; The access log file
 ; Default: not set
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.access_log is defined %}
+{% if item.php_fpm_pool_config.access_log is defined %}
 access.log = {{ item.php_fpm_pool_config.access_log }}
-  {% else %}
+{% else %}
 ;access.log = log/$pool.access.log
-  {% endif %}
+{% endif %}
 {% else %}
 ;access.log = log/$pool.access.log
 {% endif %}
@@ -356,11 +356,11 @@ access.format = "{% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_poo
 ; Default Value: not set
 ; Note: slowlog is mandatory if request_slowlog_timeout is set
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.slowlog is defined %}
+{% if item.php_fpm_pool_config.slowlog is defined %}
 slowlog = {{ item.php_fpm_pool_config.slowlog }}
-  {% else %}
+{% else %}
 ;slowlog = var/log/php-fpm/$pool-slow.log
-  {% endif %}
+{% endif %}
 {% else %}
 ;slowlog = var/log/php-fpm/$pool-slow.log
 {% endif %}
@@ -381,11 +381,11 @@ request_terminate_timeout = {% if item.php_fpm_pool_config is defined %}{{ item.
 ; Set open file descriptor rlimit.
 ; Default Value: system defined value
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.rlimit_files is defined %}
+{% if item.php_fpm_pool_config.rlimit_files is defined %}
 rlimit_files = {{ item.php_fpm_pool_config.rlimit_files }}
-  {% else %}
+{% else %}
 ;rlimit_files = 1024
-  {% endif %}
+{% endif %}
 {% else %}
 ;rlimit_files = 1024
 {% endif %}
@@ -394,11 +394,11 @@ rlimit_files = {{ item.php_fpm_pool_config.rlimit_files }}
 ; Possible Values: 'unlimited' or an integer greater or equal to 0
 ; Default Value: system defined value
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.rlimit_files is defined %}
+{% if item.php_fpm_pool_config.rlimit_files is defined %}
 rlimit_core = {{ item.php_fpm_pool_config.rlimit_core }}
-  {% else %}
+{% else %}
 ;rlimit_core = 0
-  {% endif %}
+{% endif %}
 {% else %}
 ;rlimit_core = 0
 {% endif %}
@@ -414,11 +414,11 @@ rlimit_core = {{ item.php_fpm_pool_config.rlimit_core }}
 ;       (error_log, sessions.save_path, ...).
 ; Default Value: not set
 {% if item.php_fpm_pool_config is defined %}
-  {% if item.php_fpm_pool_config.chroot is defined %}
+{% if item.php_fpm_pool_config.chroot is defined %}
 chroot = {{ item.php_fpm_pool_config.chroot }}
-  {% else %}
+{% else %}
 ;chroot = 
-  {% endif %}
+{% endif %}
 {% else %}
 ;chroot = 
 {% endif %}
@@ -487,23 +487,25 @@ include = {% if item.php_fpm_pool_config is defined %}{{ item.php_fpm_pool_confi
 ;php_admin_value[error_log] = /var/log/fpm-php.www.log
 ;php_admin_flag[log_errors] = on
 ;php_admin_value[memory_limit] = 32M
-{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_admin_flag is defined %}
-  {% for php_admin_flag in item.php_fpm_pool_config.php_admin_flag %}
+{% if item.php_fpm_pool_config is defined %}
+{% if item.php_fpm_pool_config.php_admin_flag is defined %}
+{% for php_admin_flag in item.php_fpm_pool_config.php_admin_flag %}
 php_admin_flag[{{ php_admin_flag.key }}] = {{ php_admin_flag.value }}
-  {% endfor %}
+{% endfor %}
 {% endif %}
-{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_admin_value is defined %}
-  {% for php_admin_value in item.php_fpm_pool_config.php_admin_value %}
+{% if item.php_fpm_pool_config.php_admin_value is defined %}
+{% for php_admin_value in item.php_fpm_pool_config.php_admin_value %}
 php_admin_value[{{ php_admin_value.key }}] = {{ php_admin_value.value }}
-  {% endfor %}
+{% endfor %}
 {% endif %}
-{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_flag is defined %}
-  {% for php_flag in item.php_fpm_pool_config.php_flag %}
+{% if item.php_fpm_pool_config.php_flag is defined %}
+{% for php_flag in item.php_fpm_pool_config.php_flag %}
 php_flag[{{ php_flag.key }}] = {{ php_flag.value }}
-  {% endfor %}
+{% endfor %}
 {% endif %}
-{% if item.php_fpm_pool_config is defined and item.php_fpm_pool_config.php_value is defined %}
-  {% for php_value in item.php_fpm_pool_config.php_value %}
+{% if item.php_fpm_pool_config.php_value is defined %}
+{% for php_value in item.php_fpm_pool_config.php_value %}
 php_value[{{ php_value.key }}] = {{ php_value.value }}
-  {% endfor %}
+{% endfor %}
+{% endif %}
 {% endif %}
