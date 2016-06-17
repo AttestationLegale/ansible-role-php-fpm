@@ -2084,63 +2084,131 @@ ldap.max_links = -1
 
 [opcache]
 ; Determines if Zend OPCache is enabled
-;opcache.enable=0
+{% if item.php_config is defined %}
+opcache.enable = {{ item.php_config.opcache_enable|default('1') }}
+{% else %}
+opcache.enable = 1
+{% endif %}
 
 ; Determines if Zend OPCache is enabled for the CLI version of PHP
-;opcache.enable_cli=0
+{% if item.php_config is defined %}
+opcache.enable_cli = {{ item.php_config.opcache_enable_cli|default('0') }}
+{% else %}
+opcache.enable_cli = 0
+{% endif %}
 
 ; The OPcache shared memory storage size.
-;opcache.memory_consumption=64
+{% if item.php_config is defined %}
+opcache.memory_consumption = {{ item.php_config.opcache_memory_consumption|default('64') }}
+{% else %}
+opcache.memory_consumption = 64
+{% endif %}
 
 ; The amount of memory for interned strings in Mbytes.
-;opcache.interned_strings_buffer=4
+{% if item.php_config is defined %}
+opcache.interned_strings_buffer = {{ item.php_config.opcache_interned_strings_buffer|default('4') }}
+{% else %}
+opcache.interned_strings_buffer = 4
+{% endif %}
 
 ; The maximum number of keys (scripts) in the OPcache hash table.
 ; Only numbers between 200 and 100000 are allowed.
-;opcache.max_accelerated_files=2000
+{% if item.php_config is defined %}
+opcache.max_accelerated_files = {{ item.php_config.opcache_max_accelerated_files|default('2000') }}
+{% else %}
+opcache.max_accelerated_files = 2000
+{% endif %}
 
 ; The maximum percentage of "wasted" memory until a restart is scheduled.
-;opcache.max_wasted_percentage=5
+{% if item.php_config is defined %}
+opcache.max_wasted_percentage = {{ item.php_config.opcache_max_wasted_percentage|default('5') }}
+{% else %}
+opcache.max_wasted_percentage = 5
+{% endif %}
 
 ; When this directive is enabled, the OPcache appends the current working
 ; directory to the script key, thus eliminating possible collisions between
 ; files with the same name (basename). Disabling the directive improves
 ; performance, but may break existing applications.
-;opcache.use_cwd=1
+{% if item.php_config is defined %}
+opcache.use_cwd = {{ item.php_config.opcache_use_cwd|default('1') }}
+{% else %}
+opcache.use_cwd = 1
+{% endif %}
 
 ; When disabled, you must reset the OPcache manually or restart the
 ; webserver for changes to the filesystem to take effect.
-;opcache.validate_timestamps=1
+{% if item.php_config is defined %}
+opcache.validate_timestamps = {{ item.php_config.opcache_validate_timestamps|default('1') }}
+{% else %}
+opcache.validate_timestamps = 1
+{% endif %}
 
 ; How often (in seconds) to check file timestamps for changes to the shared
 ; memory storage allocation. ("1" means validate once per second, but only
 ; once per request. "0" means always validate)
-;opcache.revalidate_freq=2
+{% if item.php_config is defined %}
+opcache.revalidate_freq = {{ item.php_config.opcache_revalidate_freq|default('2') }}
+{% else %}
+opcache.revalidate_freq = 2
+{% endif %}
 
 ; Enables or disables file search in include_path optimization
-;opcache.revalidate_path=0
+{% if item.php_config is defined %}
+opcache.revalidate_path = {{ item.php_config.opcache_revalidate_path|default('0') }}
+{% else %}
+opcache.revalidate_path = 0
+{% endif %}
 
 ; If disabled, all PHPDoc comments are dropped from the code to reduce the
 ; size of the optimized code.
-;opcache.save_comments=1
+{% if item.php_config is defined %}
+opcache.save_comments = {{ item.php_config.opcache_save_comments|default('1') }}
+{% else %}
+opcache.save_comments = 1
+{% endif %}
 
 ; If disabled, PHPDoc comments are not loaded from SHM, so "Doc Comments"
 ; may be always stored (save_comments=1), but not loaded by applications
 ; that don't need them anyway.
-;opcache.load_comments=1
+{% if item.php_config is defined %}
+opcache.load_comments = {{ item.php_config.opcache_load_comments|default('1') }}
+{% else %}
+opcache.load_comments = 1
+{% endif %}
 
 ; If enabled, a fast shutdown sequence is used for the accelerated code
-;opcache.fast_shutdown=0
+{% if item.php_config is defined %}
+opcache.fast_shutdown = {{ item.php_config.opcache_fast_shutdown|default('0') }}
+{% else %}
+opcache.fast_shutdown = 0
+{% endif %}
 
 ; Allow file existence override (file_exists, etc.) performance feature.
-;opcache.enable_file_override=0
+{% if item.php_config is defined %}
+opcache.enable_file_override = {{ item.php_config.opcache_enable_file_override|default('0') }}
+{% else %}
+opcache.enable_file_override = 0
+{% endif %}
 
 ; A bitmask, where each bit enables or disables the appropriate OPcache
 ; passes
-;opcache.optimization_level=0xffffffff
+{% if item.php_config is defined %}
+opcache.optimization_level = {{ item.php_config.opcache_optimization_level|default('0xffffffff') }}
+{% else %}
+opcache.optimization_level = 0xffffffff
+{% endif %}
 
-;opcache.inherited_hack=1
-;opcache.dups_fix=0
+{% if item.php_config is defined %}
+opcache.inherited_hack = {{ item.php_config.opcache_inherited_hack|default('1') }}
+{% else %}
+opcache.inherited_hack = 1
+{% endif %}
+{% if item.php_config is defined %}
+opcache.dups_fix = {{ item.php_config.opcache_dups_fix|default('0') }}
+{% else %}
+opcache.dups_fix = 0
+{% endif %}
 
 ; The location of the OPcache blacklist file (wildcards allowed).
 ; Each OPcache blacklist file is a text file that holds the names of files
@@ -2148,35 +2216,68 @@ ldap.max_links = -1
 ; to a new line. The filename may be a full path or just a file prefix
 ; (i.e., /var/www/x  blacklists all the files and directories in /var/www
 ; that start with 'x'). Line starting with a ; are ignored (comments).
-;opcache.blacklist_filename=
+{% if item.php_config is defined %}
+opcache.blacklist_filename = {{ item.php_config.opcache_blacklist_filename|default('') }}
+{% else %}
+opcache.blacklist_filename = 
+{% endif %}
 
 ; Allows exclusion of large files from being cached. By default all files
 ; are cached.
-;opcache.max_file_size=0
+{% if item.php_config is defined %}
+opcache.max_file_size = {{ item.php_config.opcache_max_file_size|default('0') }}
+{% else %}
+opcache.max_file_size = 0
+{% endif %}
 
 ; Check the cache checksum each N requests.
 ; The default value of "0" means that the checks are disabled.
-;opcache.consistency_checks=0
+{% if item.php_config is defined %}
+opcache.consistency_checks = {{ item.php_config.opcache_consistency_checks|default('0') }}
+{% else %}
+opcache.consistency_checks = 0
+{% endif %}
 
 ; How long to wait (in seconds) for a scheduled restart to begin if the cache
 ; is not being accessed.
-;opcache.force_restart_timeout=180
+{% if item.php_config is defined %}
+opcache.force_restart_timeout = {{ item.php_config.opcache_force_restart_timeout|default('180') }}
+{% else %}
+opcache.force_restart_timeout = 180
+{% endif %}
 
 ; OPcache error_log file name. Empty string assumes "stderr".
 ;opcache.error_log=
+{% if item.php_config is defined %}
+opcache.error_log = {{ item.php_config.opcache_error_log|default('') }}
+{% else %}
+opcache.error_log = 
+{% endif %}
 
 ; All OPcache errors go to the Web server log.
 ; By default, only fatal errors (level 0) or errors (level 1) are logged.
 ; You can also enable warnings (level 2), info messages (level 3) or
 ; debug messages (level 4).
-;opcache.log_verbosity_level=1
+{% if item.php_config is defined %}
+opcache.log_verbosity_level = {{ item.php_config.opcache_log_verbosity_level|default('1') }}
+{% else %}
+opcache.log_verbosity_level = 1
+{% endif %}
 
 ; Preferred Shared Memory back-end. Leave empty and let the system decide.
-;opcache.preferred_memory_model=
+{% if item.php_config is defined %}
+opcache.preferred_memory_model = {{ item.php_config.opcache_preferred_memory_model|default('1') }}
+{% else %}
+opcache.preferred_memory_model = 
+{% endif %}
 
 ; Protect the shared memory from unexpected writing during script execution.
 ; Useful for internal debugging only.
-;opcache.protect_memory=0
+{% if item.php_config is defined %}
+opcache.protect_memory = {{ item.php_config.opcache_protect_memory|default('0') }}
+{% else %}
+opcache.protect_memory = 0
+{% endif %}
 
 [curl]
 ; A default value for the CURLOPT_CAINFO option. This is required to be an
