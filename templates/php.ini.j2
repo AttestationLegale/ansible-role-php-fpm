@@ -2266,7 +2266,7 @@ opcache.log_verbosity_level = 1
 
 ; Preferred Shared Memory back-end. Leave empty and let the system decide.
 {% if item.php_config is defined %}
-opcache.preferred_memory_model = {{ item.php_config.opcache_preferred_memory_model|default('1') }}
+opcache.preferred_memory_model = {{ item.php_config.opcache_preferred_memory_model|default('') }}
 {% else %}
 opcache.preferred_memory_model = 
 {% endif %}
